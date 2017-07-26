@@ -16,7 +16,7 @@
   }
 
   public function __init__(){
-
+    $this->setPost();
   }
 
   public function setPost(){
