@@ -21,20 +21,21 @@
 
   public function setPost(){
     $this->PostTypes = [
-      [ 'type' => '360deg', 'label' => '360Deg'],
-      [ 'type' => 'digital', 'label' => 'Digital'],
-      [ 'type' => 'marketing', 'label' => 'Marketing'],
-      [ 'type' => 'advertising', 'label' => 'Advertising'],
-      [ 'type' => 'edition', 'label' => 'Edition'],
-      [ 'type' => 'packaging', 'label' => 'Packaging'],
-      [ 'type' => 'branding', 'label' => 'Branding'],
-      [ 'type' => 'event', 'label' => 'Event'],
-      [ 'type' => 'store_booth', 'label' => 'Store & Booth']
+      [ 'type' => '360deg', 'label' => '360Deg', 'icon' => 'dashicons-video-alt2'],
+      [ 'type' => 'digital', 'label' => 'Digital', 'icon' => 'dashicons-networking'],
+      [ 'type' => 'marketing', 'label' => 'Marketing', 'icon' => 'dashicons-chart-bar'],
+      [ 'type' => 'advertising', 'label' => 'Advertising', 'icon' => 'dashicons-megaphone'],
+      [ 'type' => 'edition', 'label' => 'Edition', 'icon' => 'dashicons-book'],
+      [ 'type' => 'packaging', 'label' => 'Packaging', 'icon' => 'dashicons-archive'],
+      [ 'type' => 'branding', 'label' => 'Branding', 'icon' => 'dashicons-lightbulb'],
+      [ 'type' => 'event', 'label' => 'Event', 'icon' => 'dashicons-calendar-alt'],
+      [ 'type' => 'store_booth', 'label' => 'Store & Booth', 'icon' => 'dashicons-store']
     ];
     $this->register_post();
   }
 
   public function register_post(){
+    $positionMenu = 100;
     // for all post type
     while (list(, $postConfig) = each($this->PostTypes)) {
       # code...
@@ -54,8 +55,8 @@
         ),
         'public' => true,
         'hierarchical' => false,
-        'menu_position' => 20,
-        'menu_icon' => 'dashicons-location-alt',
+        'menu_position' => $positionMenu++,
+        'menu_icon' => $post->icon,
         'supports' => array('title', 'editor', 'thumbnail', 'excerpt')
       )
     );
@@ -64,14 +65,12 @@
   }
 
   public function register_taxo_(){
-    $object_type = [];
-    while (list(, $postConfig) = each($this->PostTypes)) {
-      $post = (object) $postConfig;
-      array_push($object_type, $post->type);
-    }
     register_taxonomy(
       'favorite_works',
-      $object_type,
+      [
+        '360deg', 'digital', 'marketing', 'advertising', 'edition', 
+        'packaging', 'branding', 'event', 'store_booth'
+      ],
       array(
         'label' => __( 'Favorite Works' ),
         'rewrite' => array( 'slug' => 'favorite_works' ),
