@@ -78,7 +78,7 @@
   }
 
   public function action_save_postdata($post_id){
-    if(!isset($_POST[ 'fw_nonce' ] ) || !wp_verify_nonce( $_POST['fw_nonce'],'fw_metabox_nonce') ) 
+    if (!isset($_POST[ 'fw_nonce' ] ) || !wp_verify_nonce( $_POST['fw_nonce'],'fw_metabox_nonce') ) 
       return;
 
     if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
