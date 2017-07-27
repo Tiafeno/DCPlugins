@@ -26,7 +26,7 @@
 
   public function setPost(){
     $this->PostTypes = [
-      [ 'type' => '360deg', 'label' => '360Deg', 'icon' => 'dashicons-video-alt2'],
+      [ 'type' => '360deg', 'label' => '360°', 'icon' => 'dashicons-video-alt2'],
       [ 'type' => 'digital', 'label' => 'Digital', 'icon' => 'dashicons-networking'],
       [ 'type' => 'marketing', 'label' => 'Marketing', 'icon' => 'dashicons-chart-bar'],
       [ 'type' => 'advertising', 'label' => 'Advertising', 'icon' => 'dashicons-megaphone'],
