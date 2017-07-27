@@ -92,12 +92,13 @@
   }
 
   public function render_meta_box($post){
+    $favorite_works_value = get_post_meta($post->ID, 'favorite_works', true);
     ?>
       <section>
         <label><?php wp_nonce_field( 'fw_metabox_nonce', 'fw_nonce' ); ?></label>
         <label>
-          <input type="checkbox" id="favorite_works" name="favorite_works" <?= ((int)get_post_meta($post->ID, 'favorite_works', true) == 1) ? 'checked' : '' ?> 
-          value="<?= ((int)get_post_meta($post->ID, 'favorite_works', true)) ? (int)get_post_meta($post->ID, 'favorite_works', true) : 1 ?>">
+          <input type="checkbox" id="favorite_works" name="favorite_works" <?= ( (int)$favorite_works_value == 1 ) ? 'checked' : '' ?> 
+          value="<?= ( (int)$favorite_works_value ) ? (int)$favorite_works_value : 1 ?>">
           Favorite Works
         </label>
       </section>
