@@ -13,6 +13,11 @@
   protected $PostTypes;
   public function __construct(){
     add_action( 'init', array($this, '__init__' ));
+    add_action('admin_menu', function () {
+      $this->addMetaBox();
+      
+    });
+    add_action('save_post', array($this, 'action_save_postdata'), 10, 2);
   }
 
   public function __init__(){
@@ -46,7 +51,7 @@
             'name' => _x($post->label, "Plural name for {$post->label} post type"),
             'singular_name' => _x('Drawing', "Singular name for {$post->label} post type"),
             'add_new' => __('Add'),
-            'add_new_item' => __('Add New'),
+            'add_new_item' => __("Add New {$post->label}"),
             'edit_item' => __('Edit'),
             'view_item' => __('View'),
             'search_items' => __("Search {$post->label}"),
@@ -61,24 +66,44 @@
       )
     );
     }
-    $this->register_taxo_();
   }
 
-  public function register_taxo_(){
-    register_taxonomy(
-      'favorite_works',
-      [
-        '360deg', 'digital', 'marketing', 'advertising', 'edition', 
-        'packaging', 'branding', 'event', 'store_booth'
-      ],
-      array(
-        'label' => __( 'Favorite Works' ),
-        'rewrite' => array( 'slug' => 'favorite_works' ),
-        'hierarchical' => true,
-        'show_ui' => true
-      )
-    );
+  public function addMetaBox(){
+    add_meta_box('favorite_works', 'Favorite Works', 
+    array($this, 'render_meta_box'), 
+    [
+      '360deg', 'digital', 'marketing', 'advertising',
+      'edition', 'packaging', 'branding', 'event', 'store_booth'
+    ], 'side', 'high');
   }
+
+  public function action_save_postdata($post_id){
+    if(!isset($_POST[ 'fw_nonce' ] ) || !wp_verify_nonce( $_POST['fw_nonce'],'fw_metabox_nonce') ) 
+      return;
+
+    if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+      || (defined('DOING_AJAX') && DOING_AJAX)
+    ) return;
+
+    if (!current_user_can('edit_posts') )
+      return;
+    $value = (isset($_POST[ 'favorite_works' ])) ? trim($_POST[ 'favorite_works' ]) : 0;
+    update_post_meta($post_id, 'favorite_works', $value);
+  }
+
+  public function render_meta_box($post){
+    ?>
+      <section>
+        <label><?php wp_nonce_field( 'fw_metabox_nonce', 'fw_nonce' ); ?></label>
+        <label>
+          <input type="checkbox" id="favorite_works" name="favorite_works" <?= ((int)get_post_meta($post->ID, 'favorite_works', true) == 1) ? 'checked' : '' ?> 
+          value="<?= ((int)get_post_meta($post->ID, 'favorite_works', true)) ? (int)get_post_meta($post->ID, 'favorite_works', true) : 1 ?>">
+          Favorite Works
+        </label>
+      </section>
+    <?php
+  }
+
 
  }
 
