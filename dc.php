@@ -78,14 +78,14 @@
   }
 
   public function action_save_postdata($post_id){
-    if (!isset($_POST[ 'fw_nonce' ] ) || !wp_verify_nonce( $_POST['fw_nonce'],'fw_metabox_nonce') ) 
+    if (!isset($_POST[ 'fw_nonce' ] ) || !wp_verify_nonce( $_POST[ 'fw_nonce' ],'fw_metabox_nonce') ) 
       return;
 
-    if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-      || (defined('DOING_AJAX') && DOING_AJAX)
+    if ((defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE)
+      || (defined( 'DOING_AJAX' ) && DOING_AJAX)
     ) return;
 
-    if (!current_user_can('edit_posts') )
+    if (!current_user_can( 'edit_posts' ))
       return;
     $value = (isset($_POST[ 'favorite_works' ])) ? trim($_POST[ 'favorite_works' ]) : 0;
     update_post_meta($post_id, 'favorite_works', $value);
