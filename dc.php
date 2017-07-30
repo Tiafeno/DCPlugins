@@ -21,6 +21,9 @@
   }
 
   public function __init__(){
+    add_action('wp_ajax_action_get_posttypes', array($this, 'action_get_posttypes'));
+    add_action('wp_ajax_nopriv_action_get_posttype', array($this, 'action_get_posttypes'));
+
     $this->setPost();
   }
 
@@ -38,11 +41,42 @@
     ];
     $this->register_post();
   }
+  // Ajax send all post type and label
+  public function action_get_posttypes(){
+    wp_send_json( $this->PostTypes );
+  }
+  // Ajax send all contents with type
+  public function action_get_postcontent(){
+    if (empty( $this->PostTypes )) return;
+    $AllContents = [];
+    while (list(, $args) = each( $this->PostTypes )){
+      $argv = (object) $args;
+      $params = [
+        'post_type' => $argv->type
+      ];
+      $Contents = new WP_Query( $params );
+      if ( $Contents->have_posts() ){
+        $AllContents[ $argv->type ] = [];
+        while ( $Contents->have_posts() ) : $Contents->the_post();
+          if ( (int)get_post_meta($Contents->post->ID, 'favorite_works', true) === 1 ){
+            $AllContents[ $argv->type ][] = [
+              'title' => get_the_title( $Contents->post->ID ),
+              'content' => $Contents->post->post_content,
+              'thumbnail_url' => get_the_post_thumbnail_url( $Contents->post->ID, 'full' ),
+              'link' => get_permalink( $Contents->post->ID )
+            ];
+          }
+        endwhile;
+      }
+    }
+
+    wp_send_json( $AllContents ); 
+  }
 
   public function register_post(){
     $positionMenu = 100;
     // for all post type
-    while (list(, $postConfig) = each($this->PostTypes)) {
+    while (list(, $postConfig) = each( $this->PostTypes )) {
       # code...
       $post = (object) $postConfig;
       register_post_type($post->type, array(
