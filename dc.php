@@ -113,7 +113,7 @@
     */
     add_meta_box('favorite_works', 'Favorite Works', array($this, 'render_meta_box_fw'), $TypeContents, 'side', 'high');
     /*
-    * Add meta box in post type content
+    * Add meta box in page type content
     */
     add_meta_box( 'content_type', 'Content Post Type', array($this, 'render_meta_box_posttype'), 
       [
