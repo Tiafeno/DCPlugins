@@ -83,7 +83,7 @@
         'label' => _x($post->label, 'General name for "Ad" post type'),
         'labels' => array(
             'name' => _x($post->label, "Plural name for {$post->label} post type"),
-            'singular_name' => _x('Drawing', "Singular name for {$post->label} post type"),
+            'singular_name' => _x($post->label, "Singular name for {$post->label} post type"),
             'add_new' => __('Add'),
             'add_new_item' => __("Add New {$post->label}"),
             'edit_item' => __('Edit'),
@@ -140,7 +140,7 @@
 
     if (isset($_POST[ 'content_type' ])){
       if (!$this->verification()) return;
-      $ContentValue = (isset($_POST[ 'content_type' ])) ? trim($_POST[ 'content_type' ]) : 0;
+      $ContentValue = ( isset($_POST[ 'content_type' ]) ) ? trim($_POST[ 'content_type' ]) : 0;
       update_post_meta( $post_id, 'content_type', $ContentValue);
     }
     
