@@ -1,0 +1,12 @@
+[
+  {
+    "_id" : 1,
+    "name": "Add Experience",
+    "vendor" : "action_add_experiences"
+  },
+  {
+    "_id" : 2,
+    "name": "Delete Experience",
+    "vendor" : "action_delete_experiences"
+  }
+]

@@ -1,0 +1,7 @@
+.wp-person a:focus .gravatar, a:focus, a:focus .media-icon img{
+  box-shadow: none !important;
+}
+.uk-alert{
+  margin: 0;
+  padding:0;
+}

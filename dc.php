@@ -8,16 +8,29 @@
   Author URI: http://tiafenofinel.falicrea.com
   License: A "Slug" license name e.g. GPL2
  */
+ include_once plugin_dir_path(__FILE__)."/model/DCModel.php";
+ include_once plugin_dir_path( __FILE__ )."/inc/dc-scripts-functions.php";
+ include_once plugin_dir_path( __FILE__ )."/action/action-class-experiences.php";
 
  class DC_Plugins{
   protected $PostTypes;
+  public $Experiences = [];
+
   public function __construct(){
     add_action( 'init', array($this, '__init__' ));
-    add_action('admin_menu', function () {
+    add_action('admin_menu', function () {  
       $this->addMetaBox();
-      
+      $this->addAdminMenu(); 
+    });
+
+    add_action( 'wp_loaded', function(){
+      if (isset( $_GET[ 'page' ] ) || isset( $_REQUEST[ 'vendor' ] ))
+        Experiences::Factory();
     });
     add_action('save_post', array($this, 'action_save_postdata'), 10, 2);
+
+    register_activation_hook( __FILE__, ['DCModel', 'install'] );
+    register_deactivation_hook( __FILE__, ['DCModel', 'uninstall'] );
   }
 
   public function __init__(){
@@ -102,6 +115,12 @@
     }
   }
 
+  public function addAdminMenu(){
+    $urlIcon = plugin_dir_url(__FILE__).'icon.png';
+    add_menu_page('DC', 'DC', 'manage_options', 'dc_settings',
+            [$this, 'render_dc_settings'], $urlIcon);
+  }
+
   public function addMetaBox(){
     $TypeContents = [
       '360deg', 'digital', 'marketing', 'advertising',
@@ -122,13 +141,13 @@
   }
 
   private function verification(){
-    if ((defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) || (defined( 'DOING_AJAX' ) && DOING_AJAX)) 
-      return false;
-    if (!current_user_can( 'edit_posts' ))
+    if ((defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) || 
+    (defined( 'DOING_AJAX' ) && DOING_AJAX) || 
+    !current_user_can( 'edit_posts' ))
       return false;
     return true;
   }
-
+  
   public function action_save_postdata( $post_id ){
     if (isset($_POST[ 'favorite_works' ])){
       if (!isset($_POST[ 'fw_nonce' ] ) || !wp_verify_nonce( $_POST[ 'fw_nonce' ], 'fw_metabox_nonce') ) 
@@ -146,43 +165,22 @@
     
   }
 
+  public function render_dc_settings(){
+    wp_enqueue_media();
+    $Experiences = DCModel::getExperiences();
+    $this->Experiences = ($Experiences) ? $Experiences : [];
+    include_once plugin_dir_path( __FILE__ )."/templates/render_dc_settings.template.php";
+  }
+
   public function render_meta_box_fw( $post ){
     $favorite_works_value = get_post_meta($post->ID, 'favorite_works', true);
-    ?>
-      <section>
-        <label><?php wp_nonce_field( 'fw_metabox_nonce', 'fw_nonce' ); ?></label>
-        <label>
-          <input type="checkbox" id="favorite_works" name="favorite_works" <?= ( (int)$favorite_works_value == 1 ) ? 'checked' : '' ?> 
-          value="<?= ( (int)$favorite_works_value ) ? (int)$favorite_works_value : 1 ?>">
-          Favorite Works
-        </label>
-      </section>
-    <?php
+    include_once plugin_dir_path( __FILE__ )."/templates/render_metabox_fw.template.php";
   }
 
   public function render_meta_box_posttype( $post ){
     $content_type = get_post_meta($post->ID, 'content_type', true);
-    if (is_array($this->PostTypes) && empty($this->PostTypes)) return false;
-    ?>
-     <fieldset>
-        <input type="radio" name="content_type" class="post-format" value="0" 
-         <?= (empty( $content_type )) ? ' checked="checked" ': '' ?>
-         id="content-type-0"></input>
-        <label for="content-type-0" class="post-format-icon">
-          DEFAULT
-        </label>
-        <br>
-     <?php foreach ($this->PostTypes as $posttype): ?>
-        <input type="radio" name="content_type" class="post-format" value="<?= $posttype[ 'type' ] ?>" 
-          <?= (!empty( $content_type ) && $content_type == $posttype[ 'type' ]) ? ' checked="checked" ': '' ?>
-          id="<?= 'content-type-'.$posttype[ 'type' ] ?>"></input>
-        <label for="<?= 'content-type-'.$posttype[ 'type' ] ?>" class="post-format-icon">
-          <?= strtoupper($posttype[ 'label' ]) ?>
-        </label>
-        <br>
-      <?php endforeach; ?>
-      </fieldset>
-    <?php
+    if (!is_array($this->PostTypes) || empty($this->PostTypes)) return false;
+    include_once plugin_dir_path( __FILE__ )."/templates/render_metabox_posttype.template.php";
   }
 
 
