@@ -8,5 +8,10 @@
     "_id" : 2,
     "name": "Delete Experience",
     "vendor" : "action_delete_experiences"
+  },
+  {
+    "_id" : 3,
+    "name" : "Add Option",
+    "vendor": "action_add_option_experiences"
   }
 ]

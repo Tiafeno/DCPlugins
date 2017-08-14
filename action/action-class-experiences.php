@@ -9,6 +9,12 @@ class Experiences{
   protected $company_description;
   protected $company_logo;
 
+  public $Option;
+  public $Options = [
+    'skills',
+    'awards'
+  ];
+
   public function __construct(){
     global $wpdb;
     $this->db = &$wpdb;
@@ -19,8 +25,8 @@ class Experiences{
     $vendor = (isset($_REQUEST['vendor'])) ? $_REQUEST['vendor'] : null;
     $vendor = trim( $vendor );
     try{
-      $Experience = Services::getExperiences();
-      $Experiences = json_decode($Experience);
+      $ServicesExp = Services::getExperiences();
+      $Experiences = json_decode($ServicesExp);
       //exit(print_r($Experiences));
       if (is_array( $Experiences )) {
         while(list(, $experience) = each( $Experiences )) {
@@ -33,13 +39,33 @@ class Experiences{
     } catch( Exception $e ){}
   }
 
+  public function action_add_option_experiences(){
+    while (list(, $option) = each($this->Options)):
+      $nonce = $option.'_nonce';
+      $verify = $option.'_experiences_add_nonce';
+      if (!isset($_POST[ $nonce ] ) || !wp_verify_nonce( $_POST[ $nonce ], $verify) ) 
+        continue;
+
+      if (isset( $_POST[ $option ])){
+        $op = $_POST[ $option ];
+        
+        $this->Option = trim( $op ) ; //nl2br
+        if (is_null( get_option( $option, null ) )){
+          add_option( $option, $this->Option);
+        } else { update_option( $option, $this->Option); }
+
+        break;
+      }
+    endwhile;
+  }
+
   public function action_delete_experiences(){
     if ( isset( $_GET[ 'id' ] ) ) {
       if (!is_int( (int)$_GET[ 'id' ]) ) return;
       $this->company_id = (int)trim( $_GET[ 'id' ] );
       $req = $this->db->delete( $this->db->prefix.'dc_experiences', array('id' => esc_sql($this->company_id)), array('%d') );
       if ($req){
-        wp_redirect(admin_url('/admin.php?page=dc_settings', 'http'), 301);
+        wp_redirect(admin_url('/admin.php?page=dc_experiences', 'http'), 301);
       }
     }
   }

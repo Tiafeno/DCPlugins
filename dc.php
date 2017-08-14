@@ -34,10 +34,9 @@
   }
 
   public function __init__(){
+    $this->setPost();
     add_action('wp_ajax_action_get_posttypes', array($this, 'action_get_posttypes'));
     add_action('wp_ajax_nopriv_action_get_posttype', array($this, 'action_get_posttypes'));
-
-    $this->setPost();
   }
 
   public function setPost(){
@@ -88,9 +87,12 @@
 
   public function register_post(){
     $positionMenu = 100;
+    $defaultSupports = ['title', 'editor', 'thumbnail', 'excerpt'];
+    $this->PostTypes[] = [ 'type' => 'clients', 'label' => 'Clients', 'icon' => 'dashicons-businessman', 'supports' => [
+      'title', 'thumbnail'
+    ]];
     // for all post type
     while (list(, $postConfig) = each( $this->PostTypes )) {
-      # code...
       $post = (object) $postConfig;
       register_post_type($post->type, array(
         'label' => _x($post->label, 'General name for "Ad" post type'),
@@ -109,16 +111,34 @@
         'hierarchical' => false,
         'menu_position' => $positionMenu++,
         'menu_icon' => $post->icon,
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt')
-      )
-    );
+        'supports' => (isset( $post->supports )) ? $post->supports : $defaultSupports
+      ));
     }
+    $this->register_taxo();
+  }
+
+  private function register_taxo(){
+    $taxonomy = 'activity';
+    $labels = [
+      'name' => 'Activities',
+      'singular_name' => 'Activitie'
+    ];
+    $args = [
+      'hierarchical'      => true,
+      'labels'            => $labels,
+      'show_ui'           => true,
+      'show_admin_column' => true,
+      'query_var'         => true,
+      'rewrite'           => array( 'slug' => 'activities' ),
+    ];
+    register_taxonomy( $taxonomy, 'clients', $args);
+    DCModel::setDefaultActivityTerms( $taxonomy );
   }
 
   public function addAdminMenu(){
     $urlIcon = plugin_dir_url(__FILE__).'icon.png';
-    add_menu_page('DC', 'DC', 'manage_options', 'dc_settings',
-            [$this, 'render_dc_settings'], $urlIcon);
+    add_menu_page('DC', 'DC', 'manage_options', 'dc_settings', [$this, 'render_dc_settings'], $urlIcon);
+    add_submenu_page( 'dc_settings', 'Experiences', 'Experiences', 'manage_options', 'dc_experiences', [$this, 'render_dc_settings_experiences']);
   }
 
   public function addMetaBox(){
@@ -166,10 +186,14 @@
   }
 
   public function render_dc_settings(){
+    include_once plugin_dir_path( __FILE__ )."/templates/render_dc_settings.template.php";
+  }
+
+  public function render_dc_settings_experiences(){
     wp_enqueue_media();
     $Experiences = DCModel::getExperiences();
     $this->Experiences = ($Experiences) ? $Experiences : [];
-    include_once plugin_dir_path( __FILE__ )."/templates/render_dc_settings.template.php";
+    include_once plugin_dir_path( __FILE__ )."/templates/render_dc_settings_experiences.template.php";
   }
 
   public function render_meta_box_fw( $post ){
