@@ -30,7 +30,7 @@
     add_action('save_post', array($this, 'action_save_postdata'), 10, 2);
 
     register_activation_hook( __FILE__, ['DCModel', 'install'] );
-    register_deactivation_hook( __FILE__, ['DCModel', 'uninstall'] );
+    register_uninstall_hook( __FILE__, ['DCModel', 'uninstall'] );
   }
 
   public function __init__(){
