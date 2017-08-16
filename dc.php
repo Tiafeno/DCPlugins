@@ -158,6 +158,13 @@
       [
         'page'
       ], 'side', 'high' );
+    /*
+    * Add meta box gif link
+    */
+    add_meta_box( 'gifs', 'Gifs', array($this, 'render_meta_box_gifs'), 
+    [
+      $TypeContents
+    ], 'normal', 'low' );
   }
 
   private function verification(){
@@ -177,6 +184,11 @@
       update_post_meta($post_id, 'favorite_works', $value);
     }
 
+    if (isset($_POST['gifs'])){
+      $value = isset($_POST['gifs']) ? trim($_POST['gifs']) : '';
+      update_post_meta($post_id, 'gifs', $value);
+    }
+
     if (isset($_POST[ 'content_type' ])){
       if (!$this->verification()) return;
       $ContentValue = ( isset($_POST[ 'content_type' ]) ) ? trim($_POST[ 'content_type' ]) : 0;
@@ -194,6 +206,11 @@
     $Experiences = DCModel::getExperiences();
     $this->Experiences = ($Experiences) ? $Experiences : [];
     include_once plugin_dir_path( __FILE__ )."/templates/render_dc_settings_experiences.template.php";
+  }
+
+  public function render_meta_box_gifs( $post ){
+    $gifs = get_post_meta($post->ID, 'gifs', true);
+    include_once plugin_dir_path( __FILE__ )."/templates/render_metabox_gifs.template.php";
   }
 
   public function render_meta_box_fw( $post ){
