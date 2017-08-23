@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="3e56be80-8c6f-4e8d-903a-9dc13f10c912" name="davidcalmel-Plugins" url="http://ftp.mikeamada.com">
+        <fileTransfer host="ftp.mikeamada.com" port="21" rootFolder="/public_html/dc/wp-content/themes/davidcalmel" password="dfeddf87dfdadff5dfdddfc6dfd3dfdfdfcfdfe8df95dffa" username="mikeamad">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
