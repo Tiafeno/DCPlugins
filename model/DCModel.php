@@ -23,9 +23,9 @@ class DCModel {
 			], [
 				'post_type' => esc_sql( $params->post_type )
 			], [
-				'%s'
-			], [
 				'%d'
+			], [
+				'%s'
 			] ) : $this->db->insert( $this->db->prefix . "dc_posttype_attachment", array(
 				'post_type' => esc_sql( $params->post_type ),
 				'page_id'   => esc_sql( $params->page_id )
