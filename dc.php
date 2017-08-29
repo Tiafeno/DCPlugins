@@ -24,7 +24,7 @@ class DC_Plugins {
 		} );
 
 		add_action( 'wp_loaded', function () {
-			if ( isset( $_GET['page'] ) || isset( $_REQUEST['vendor'] ) ) {
+			if (isset( $_GET['page'] ) || isset( $_REQUEST['vendor'] ) ) {
 				Experiences::Factory();
 			}
 			if ( isset( $_POST['configs_nonce'] ) ) {
@@ -241,7 +241,7 @@ class DC_Plugins {
 
 		if ( isset( $_POST['clienturl'] ) ) {
 			$clienturlValue = isset( $_POST['clienturl'] ) ? trim( $_POST['clienturl'] ) : '';
-			update_post_meta( $post_id, 'clienturl', $clienturlValue );
+			update_post_meta( $post_id, 'clienturl', esc_url( $clienturlValue ) );
 		}
 
 		if ( isset( $_POST['content_type'] ) ) {
