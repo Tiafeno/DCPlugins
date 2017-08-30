@@ -30,8 +30,12 @@ class Experiences{
       if (is_array( $Experiences )) {
         while (list(, $experience) = each( $Experiences )) {
           if ($vendor != $experience->vendor) continue;
-          $Reflect = new ReflectionMethod('Experiences', $experience->vendor);
-          $Reflect->invoke( new Experiences() );
+          try{
+            $Reflect = new ReflectionMethod('Experiences', $experience->vendor);
+            $Reflect->invoke( new Experiences() );
+          } catch(ReflectionException $ExpReflection){
+            continue;
+          }
           break;
         }
       }
