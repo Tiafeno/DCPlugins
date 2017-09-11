@@ -50,7 +50,7 @@ class DC_Plugins {
 		$this->PostTypes = [
 			[ 'type' => '360deg', 'label' => '360°', 'icon' => 'dashicons-video-alt2' ],
 			[ 'type' => 'digital', 'label' => 'Digital', 'icon' => 'dashicons-networking' ],
-			[ 'type' => 'marketing', 'label' => 'Marketing', 'icon' => 'dashicons-chart-bar' ],
+			// [ 'type' => 'marketing', 'label' => 'Marketing', 'icon' => 'dashicons-chart-bar' ],
 			[ 'type' => 'advertising', 'label' => 'Advertising', 'icon' => 'dashicons-megaphone' ],
 			[ 'type' => 'edition', 'label' => 'Edition', 'icon' => 'dashicons-book' ],
 			[ 'type' => 'packaging', 'label' => 'Packaging', 'icon' => 'dashicons-archive' ],
@@ -172,7 +172,7 @@ class DC_Plugins {
 		$TypeContents = [
 			'360deg',
 			'digital',
-			'marketing',
+			// 'marketing',
 			'advertising',
 			'edition',
 			'packaging',
