@@ -3,7 +3,7 @@
   Plugin Name: DC. Module
   Plugin URI: https://github.com/Tiafeno/DCPlugins
   Description: Module Wordpress pour le template David Calmel
-  Version: 1.0
+  Version: 1.1
   Author: Tiafeno Finel
   Author URI: http://tiafenofinel.falicrea.com
   License: A "Slug" license name e.g. GPL2
