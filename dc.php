@@ -195,13 +195,6 @@ class DC_Plugins {
 			[
 				$TypeContents
 			], 'normal', 'low' );
-		/*
-		* Add meta box link for clients type post
-		*/
-		add_meta_box( 'clienturl', 'Client URL', array( $this, 'render_meta_box_clienturl' ),
-			[
-				'clients'
-			], 'normal', 'low' );
 
 
 	}
@@ -237,11 +230,6 @@ class DC_Plugins {
 		if ( isset( $_POST['gifs'] ) ) {
 			$value = isset( $_POST['gifs'] ) ? trim( $_POST['gifs'] ) : '';
 			update_post_meta( $post_id, 'gifs', $value );
-		}
-
-		if ( isset( $_POST['clienturl'] ) ) {
-			$clienturlValue = isset( $_POST['clienturl'] ) ? trim( $_POST['clienturl'] ) : '';
-			update_post_meta( $post_id, 'clienturl', esc_url( $clienturlValue ) );
 		}
 
 		if ( isset( $_POST['content_type'] ) ) {
@@ -302,11 +290,6 @@ class DC_Plugins {
 	public function render_meta_box_gifs( $post ) {
 		$gifs = get_post_meta( $post->ID, 'gifs', true );
 		include_once plugin_dir_path( __FILE__ ) . "/templates/render_metabox_gifs.template.php";
-	}
-
-	public function render_meta_box_clienturl( $post ) {
-		$clienturl = get_post_meta( $post->ID, 'clienturl', true );
-		include_once plugin_dir_path( __FILE__ ) . "/templates/render_metabox_clienturl.template.php";
 	}
 
 	public function render_meta_box_fw( $post ) {
