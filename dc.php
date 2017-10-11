@@ -99,15 +99,6 @@ class DC_Plugins {
 	public function register_post() {
 		$positionMenu      = 100;
 		$defaultSupports   = [ 'title', 'editor', 'thumbnail', 'excerpt' ];
-		$this->PostTypes[] = [
-			'type'     => 'clients',
-			'label'    => 'Clients',
-			'icon'     => 'dashicons-businessman',
-			'supports' => [
-				'title',
-				'thumbnail'
-			]
-		];
 
 		// for all post type
 		while ( list( , $postConfig ) = each( $this->PostTypes ) ) {
@@ -132,27 +123,6 @@ class DC_Plugins {
 				'supports'      => ( isset( $post->supports ) ) ? $post->supports : $defaultSupports
 			) );
 		}
-		$this->register_taxo();
-	}
-
-	private function register_taxo() {
-		array_pop( $this->PostTypes );
-		
-		$taxonomy = 'activity';
-		$labels   = [
-			'name'          => 'Activities',
-			'singular_name' => 'Activitie'
-		];
-		$args     = [
-			'hierarchical'      => true,
-			'labels'            => $labels,
-			'show_ui'           => true,
-			'show_admin_column' => true,
-			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'activities' ),
-		];
-		register_taxonomy( $taxonomy, 'clients', $args );
-		DCModel::setDefaultActivityTerms( $taxonomy );
 	}
 
 	public function addAdminMenu() {

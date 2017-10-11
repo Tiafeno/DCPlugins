@@ -53,7 +53,7 @@
       </div>
     </div>
   </div>
-
+  <!--
   <div class="uk-width-1-2@m">
     <div class="uk-card uk-card-default uk-card-body">
       <form method="post" action="">
@@ -88,5 +88,6 @@
       </form>
     </div>
   </div>
+  -->
 
 </div>

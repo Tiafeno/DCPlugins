@@ -1,7 +1,6 @@
 <?php
 
 class DCModel {
-	public static $DefaultActivitiesClients = [ ];
 	public $db;
 
 	public function __construct() {
@@ -73,33 +72,6 @@ class DCModel {
 		$Results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}{$dbname}" );
 
 		return ( $wpdb->num_rows ) ? $Results : false;
-	}
-
-	public static function setDefaultActivityTerms( $taxonomy ) {
-		self::$DefaultActivitiesClients = [
-			[ 'term' => 'Food', 'slug' => 'food' ],
-			[ 'term' => 'Telco', 'slug' => 'telco' ],
-			[ 'term' => 'Bank & Insurance', 'slug' => sanitize_title( 'Bank & Insurance' ) ],
-			[ 'term' => 'Mines & Petroleum', 'slug' => sanitize_title( 'Mines & Petroleum' ) ],
-			[ 'term' => 'Services', 'slug' => 'services' ],
-			[ 'term' => 'Ngo & Relief', 'slug' => sanitize_title( 'Ngo & Relief' ) ],
-			[ 'term' => 'Institutional', 'slug' => 'institutional' ]
-		];
-		if ( taxonomy_exists( $taxonomy ) ) {
-			while ( list( , $activity ) = each( self::$DefaultActivitiesClients ) ):
-				$obj_activity = (object) $activity;
-				$termExist    = term_exists( $obj_activity->slug, $taxonomy );
-				if ( is_null( $termExist ) ) {
-					wp_insert_term(
-						$obj_activity->term, // the term
-						$taxonomy, // the taxonomy
-						array(
-							'slug' => $obj_activity->slug
-						)
-					);
-				}
-			endwhile;
-		}
 	}
 
 	public static function install() {
