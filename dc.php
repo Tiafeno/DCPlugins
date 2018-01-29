@@ -46,6 +46,9 @@ class DC_Plugins {
 		add_action( 'wp_ajax_nopriv_action_save_configs', array( $this, 'action_save_configs' ) );
 	}
 
+	/**
+	 * Create post type and call method for register
+	 */
 	public function setPost() {
 		$this->PostTypes = [
 			[ 'type' => '360deg', 'label' => '360°', 'icon' => 'dashicons-video-alt2' ],
@@ -56,7 +59,8 @@ class DC_Plugins {
 			[ 'type' => 'packaging', 'label' => 'Packaging', 'icon' => 'dashicons-archive' ],
 			[ 'type' => 'branding', 'label' => 'Branding', 'icon' => 'dashicons-lightbulb' ],
 			[ 'type' => 'event', 'label' => 'Event', 'icon' => 'dashicons-calendar-alt' ],
-			[ 'type' => 'store_booth', 'label' => 'Store & Booth', 'icon' => 'dashicons-store' ]
+			[ 'type' => 'store_booth', 'label' => 'Store & Booth', 'icon' => 'dashicons-store' ],
+			[ 'type' => 'plus_brand', 'label' => 'Brand places', 'icon' => 'dashicons-plus' ]
 		];
 		$this->register_post();
 	}
@@ -96,6 +100,9 @@ class DC_Plugins {
 		wp_send_json( $AllContents );
 	}
 
+	/**
+	 * Register wordpress post type
+	 */
 	public function register_post() {
 		$positionMenu      = 100;
 		$defaultSupports   = [ 'title', 'editor', 'thumbnail', 'excerpt' ];
@@ -125,6 +132,9 @@ class DC_Plugins {
 		}
 	}
 
+	/**
+	 * Create admin menu for manage template setting
+	 */
 	public function addAdminMenu() {
 		$urlIcon = plugin_dir_url( __FILE__ ) . 'icon.png';
 		add_menu_page( 'DC', 'DC', 'manage_options', 'dc_settings', [ $this, 'render_dc_settings' ], $urlIcon );
@@ -138,7 +148,11 @@ class DC_Plugins {
 		] );
 	}
 
+	/**
+	 * Add metabox favorite work for all declared post type
+	 */
 	public function addMetaBox() {
+		$plus_brand = "plus_brand";
 		$TypeContents = [
 			'360deg',
 			'digital',
@@ -148,7 +162,8 @@ class DC_Plugins {
 			'packaging',
 			'branding',
 			'event',
-			'store_booth'
+			'store_booth',
+			$plus_brand
 		];
 
 		/*
@@ -165,7 +180,6 @@ class DC_Plugins {
 			[
 				$TypeContents
 			], 'normal', 'low' );
-
 
 	}
 
